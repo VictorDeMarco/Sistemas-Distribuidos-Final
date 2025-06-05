@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio | UniCafé</title>
+</head>
+<body>
+<div layout:fragment="content" class="d-flex justify-content-center align-items-center" style="min-height: 85vh;">
+    <div class="text-center bg-dark text-white p-5 rounded-4 shadow" style="max-width: 500px; width: 100%; backdrop-filter: blur(5px); background-color: rgba(0, 0, 0, 0.6);">
+
+        <h1 class="fw-bold mb-3" th:text="'Hola, ' + ${nombre} + '!'">Bienvenido</h1>
+        <p class="text-light">Has iniciado sesión correctamente.</p>
+        <p class="text-secondary mb-4">Ahora puedes elegir qué función deseas usar:</p>
+
+        <div class="d-grid gap-3">
+            <form th:action="@{/api-test}" method="get">
+                <button class="btn btn-outline-primary w-100" type="submit">🔎 Probar API Flask</button>
+            </form>
+
+            <form th:action="@{/usuarios}" method="get">
+                <button class="btn btn-outline-warning w-100" type="submit">🧑‍💼 Usuarios</button>
+            </form>
+
+            <form th:action="@{/productos}" method="get">
+                <button class="btn btn-outline-light w-100" type="submit">☕ Productos</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

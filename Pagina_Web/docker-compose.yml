@@ -1,0 +1,52 @@
+services:
+  mysqldb:
+    image: mysql:8.0.2
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
+    volumes:
+      - db:/var/lib/mysql
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    networks:
+      - mysql-python-app-network
+  spring-app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      restart: unless-stopped
+      env_file: ./.env
+      depends_on:
+        - mysqldb
+      networks:
+        - mysql-python-app-network
+      environment:
+        SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+        SPRING_DATASOURCE_USERNAME: ${MYSQLDB_USER}
+        SPRING_DATASOURCE_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+      ports:
+        - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+
+  flask-api:
+      build:
+        context: ../Api_Python
+      container_name: python-flask-app-container
+      volumes:
+        - ../Api_Python:/app
+      environment:
+        - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      ports:
+        - $API_LOCAL_PORT:$API_DOCKER_PORT
+      depends_on:
+        - mysqldb
+      networks:
+        - mysql-python-app-network
+volumes:
+  db:
+networks:
+  mysql-python-app-network:
+    name: mysql-python-app-network
+

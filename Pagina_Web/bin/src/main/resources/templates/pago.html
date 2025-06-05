@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Pago</title>
+</head>
+<body>
+<div layout:fragment="content" class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="bg-dark text-white p-5 rounded-4 shadow w-100" style="max-width: 600px; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px);">
+        <h2 class="text-center mb-4">💳 Pasarela de Pago</h2>
+
+        <p class="text-center mb-4">Total a pagar: <strong th:text="${total} + ' €'">0.00 €</strong></p>
+
+
+        <form th:action="@{/carrito/confirmar}" method="post" id="formPago">
+
+        <div class="mb-3">
+            <label class="form-label">Método de pago</label>
+            <select class="form-select" id="metodoPago" name="metodo" required onchange="mostrarCampos()">
+                <option value="">Selecciona un método</option>
+                <option value="tarjeta">💳 Tarjeta de crédito</option>
+                <option value="paypal">🅿️ PayPal</option>
+                <option value="bizum">📱 Bizum</option>
+            </select>
+        </div>
+
+
+        <div id="pagoTarjeta" style="display:none;">
+            <div class="mb-2">
+                <label class="form-label">Número de tarjeta</label>
+                <input type="text" id="numeroTarjeta"  class="form-control" maxlength="19" placeholder="1234 5678 9012 3456">
+                <div id="errorTarjeta" class="text-danger small mt-1"></div>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Nombre del titular</label>
+                <input type="text" id="nombreTitular" class="form-control" placeholder="Tu nombre">
+                <div id="errorNombre" class="text-danger small mt-1"></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Vencimiento</label>
+                    <input type="text" id="vencimiento" class="form-control" placeholder="MM/AA">
+                    <div id="errorVencimiento" class="text-danger small mt-1"></div>
+                </div>
+                <div class="col">
+                    <label class="form-label">CVC</label>
+                    <input type="text" id="cvc" class="form-control" placeholder="123">
+                    <div id="errorCvc" class="text-danger small mt-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pagoPaypal" style="display:none;">
+            <label class="form-label mt-3">Correo de PayPal</label>
+            <input type="email" id="correoPaypal" class="form-control" placeholder="correo@ejemplo.com">
+            <div id="errorPaypal" class="text-danger small mt-1"></div>
+        </div>
+
+        <div id="pagoBizum" style="display:none;">
+            <label class="form-label mt-3">Número de teléfono</label>
+            <input type="tel" id="telefonoBizum" class="form-control" placeholder="600123456">
+            <div id="errorBizum" class="text-danger small mt-1"></div>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 mt-4">✅ Confirmar pago</button>
+    </form>
+
+    <a href="/carrito" class="btn btn-secondary mt-3 w-100">⬅️ Cancelar</a>
+
+    <script>
+        function mostrarCampos() {
+            const metodo = document.getElementById("metodoPago").value;
+
+            document.getElementById("pagoTarjeta").style.display = "none";
+            document.getElementById("pagoPaypal").style.display = "none";
+            document.getElementById("pagoBizum").style.display = "none";
+
+            if (metodo === "tarjeta") document.getElementById("pagoTarjeta").style.display = "block";
+            if (metodo === "paypal") document.getElementById("pagoPaypal").style.display = "block";
+            if (metodo === "bizum") document.getElementById("pagoBizum").style.display = "block";
+        }
+
+        document.getElementById("formPago").addEventListener("submit", function (e) {
+            let isValid = true;
+
+
+            document.querySelectorAll(".text-danger").forEach(el => el.innerText = "");
+
+            const metodo = document.getElementById("metodoPago").value;
+
+            if (metodo === "tarjeta") {
+                if (!document.getElementById("numeroTarjeta").value.trim()) {
+                    document.getElementById("errorTarjeta").innerText = "Introduce un número de tarjeta.";
+                    isValid = false;
+                }
+                if (!document.getElementById("nombreTitular").value.trim()) {
+                    document.getElementById("errorNombre").innerText = "Introduce un nombre del titular.";
+                    isValid = false;
+                }
+                if (!document.getElementById("vencimiento").value.trim()) {
+                    document.getElementById("errorVencimiento").innerText = "Introduce una fecha de vencimiento.";
+                    isValid = false;
+                }
+                if (!document.getElementById("cvc").value.trim()) {
+                    document.getElementById("errorCvc").innerText = "Introduce un CVC.";
+                    isValid = false;
+                }
+            }
+
+            if (metodo === "paypal") {
+                if (!document.getElementById("correoPaypal").value.trim()) {
+                    document.getElementById("errorPaypal").innerText = "Introduce tu correo de PayPal.";
+                    isValid = false;
+                }
+            }
+
+            if (metodo === "bizum") {
+                if (!document.getElementById("telefonoBizum").value.trim()) {
+                    document.getElementById("errorBizum").innerText = "Introduce tu número de Bizum.";
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) e.preventDefault();
+        });
+    </script>
+    </div>
+</div>
+</body>
+</html>

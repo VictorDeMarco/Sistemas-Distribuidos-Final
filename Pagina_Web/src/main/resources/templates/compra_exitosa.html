@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Compra realizada</title>
+</head>
+<body>
+<div layout:fragment="content" class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+
+    <div class="bg-dark text-white p-5 rounded-4 shadow text-center" style="max-width: 600px; width: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+        <h2 class="mb-3">🎉 ¡Gracias por tu compra!</h2>
+        <p class="mb-4">Tu pedido ha sido procesado con éxito.</p>
+
+        <a href="/productos" class="btn btn-outline-light">
+            🛍️ Seguir comprando
+        </a>
+    </div>
+
+</div>
+</body>
+</html>

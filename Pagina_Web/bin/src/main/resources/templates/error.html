@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Error</title>
+</head>
+<body>
+<div layout:fragment="content" class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+
+    <div class="bg-dark text-white p-5 rounded-4 shadow text-center" style="max-width: 600px; width: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+        <h1 class="display-5 mb-3">😓 ¡Vaya! Algo salió mal.</h1>
+
+        <p th:text="${status + ' - ' + error}" class="fs-5">Error desconocido</p>
+        <p th:if="${message}" th:text="'Detalles: ' + ${message}" class="text-muted mb-4"></p>
+
+        <a href="/home" class="btn btn-outline-light">⬅️ Volver al inicio</a>
+    </div>
+
+</div>
+</body>
+</html>
+
