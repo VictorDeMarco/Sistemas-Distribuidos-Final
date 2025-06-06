@@ -38,16 +38,16 @@
         <div class="text-center mt-4">
             <a href="/home" class="btn btn-outline-light">⬅️ Volver al Home</a>
         </div>
+        <script th:inline="javascript">
+            let endpoint = [[${endpointLlamado}]];
+            function abrirApi() {
+                if (endpoint) {
+                    window.open(endpoint, '_blank');
+                }
+            }
+        </script>
     </div>
 </div>
 
-<script th:inline="javascript">
-    let endpoint = [[${endpointLlamado}]];
-    function abrirApi() {
-        if (endpoint) {
-            window.open(endpoint, '_blank');
-        }
-    }
-</script>
 </body>
 </html>
